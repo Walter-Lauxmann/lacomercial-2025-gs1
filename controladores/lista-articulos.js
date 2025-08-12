@@ -29,11 +29,9 @@ function mostrarArticulos() {
                 <img src="./imagenes/storage.svg"> Almacenamiento: ${articulo.descripcion.almacenamiento} <br>
                 <img src="./imagenes/photo_camera.svg"> Cámaras: ${articulo.descripcion.camaras} <br>
                 <img src="./imagenes/aod.svg"> Pantalla: ${articulo.descripcion.pantalla}
-
               </p>
               <h5>$ <span name="spanprecio">${articulo.precio}</span>.-</h5>
-              <input type="number" name="inputcantidad" class="form-control" value="0" min="0" max="30" onchange="calcular()" />
-              
+              <input type="number" name="inputcantidad" class="form-control" value="0" min="0" max="30" onchange="calcular()" />          
             </div>
             <div class="card-footer d-flex justify-content-center">
                 <button class="btn-editar btn btn-primary">Editar</button>
