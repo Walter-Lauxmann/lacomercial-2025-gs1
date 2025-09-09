@@ -1,7 +1,11 @@
-import {articulos} from "../modelos/articulos.js";
+import {seleccionarProductos} from "../modelos/productos.js";
 
 // Elementos del DOM
 const listado = document.querySelector("#listado");
+
+// Variables
+let articulos = [];
+let articulo = {};
 
 /**
  * Se ejecuta al cargar el documento
@@ -13,7 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
 /**
  * Muestra la lista de articulos
  */
-function mostrarArticulos() {
+async function mostrarArticulos() {
+  articulos = await seleccionarProductos();
     listado.innerHTML = '';
 
     articulos.map((articulo) => {
@@ -25,10 +30,11 @@ function mostrarArticulos() {
             <div class="card-body">
               <h5 class="card-title"><span name="spancodigo">${articulo.codigo}</span> - <span name="spannombre">${articulo.nombre}</span></h5>
               <p class="card-text">
-                <img src="./imagenes/memory.svg"> Procesador: ${articulo.descripcion.procesador} <br>
-                <img src="./imagenes/storage.svg"> Almacenamiento: ${articulo.descripcion.almacenamiento} <br>
-                <img src="./imagenes/photo_camera.svg"> Cámaras: ${articulo.descripcion.camaras} <br>
-                <img src="./imagenes/aod.svg"> Pantalla: ${articulo.descripcion.pantalla}
+                <img src="./imagenes/memory.svg"> |
+                <img src="./imagenes/storage.svg"> | 
+                <img src="./imagenes/photo_camera.svg"> |
+                <img src="./imagenes/aod.svg"><br>
+                ${articulo.descripcion}
               </p>
               <h5>$ <span name="spanprecio">${articulo.precio}</span>.-</h5>
               <input type="number" name="inputcantidad" class="form-control" value="0" min="0" max="30" onchange="calcular()" />          
@@ -38,8 +44,7 @@ function mostrarArticulos() {
                 <button class="btn-borrar btn btn-danger">Borrar</button>
             </div>
           </div>
-        </div>
-        
+        </div>        
         `
     })
 }
