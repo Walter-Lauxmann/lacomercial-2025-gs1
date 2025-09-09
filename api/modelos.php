@@ -108,5 +108,30 @@ class Modelo extends Conexion {
         return $datos;
     }
 
+    /**
+     * Inserta un registro en la BD
+     * @param datos los datos a insertar
+     * @return id el id del registro insertado
+     */
+    public function insertar($datos) {
+        // INSERT INTO productos (codigo, nombre, descripcion, precio, stock, imagen)
+        // VALUES ('201', 'Motorola G9', 'Un gran teléfono', '450000', '30', 'motorola.jpg')
+        unset($datos->id); // Eliminamos el valor de id
+        $campos = implode(",",array_keys($datos)); // Separar las claves del array
+        $valores = implode("','", array_values($datos)); // Separamos los valores del array
+
+        // Guardamos la instrucción SQL
+        $sql ="INSERT INTO $this->tabla ($campos) VALUES ('$valores')";
+        echo $sql; // Mostramos la instrucción SQL
+
+        // Ejecutamos la instrucción SQL y devolvemos el id
+        if ($this->bd->query($sql)) {
+            // Si la consulta fue exitosa, devolvemos el ID autoincremental
+            return $this->bd->insert_id;
+        } else {
+            // Si hubo un error, devolvemos 0 o false
+            return 0; 
+        }
+    }
 }
 ?>
