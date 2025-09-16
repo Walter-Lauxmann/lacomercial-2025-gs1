@@ -28,3 +28,34 @@ export function insertarProductos(datos) {
         return data;
     })
 }
+
+/**
+ * Actualiza los datos en la Base de Datos
+ * @param datos los datos a actualizar
+ * @param id el id del artículo
+ */
+export const actualizarProductos = (datos, id) => {
+    fetch(`${URL}&accion=actualizar&id=${id}`, {
+        method: 'POST',
+        body: datos
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log(data);
+        return data;
+    })
+}
+
+/**
+ * Elimina los datos en la Base de Datos
+ * @param id el id del artículo
+ */
+export const eliminarProductos = (id) => {
+    fetch(`${URL}&accion=eliminar&id=${id}`, {})
+    .then(res => res.json())
+    .then(data => {
+        console.log(data);
+        return data;
+    })
+}
+

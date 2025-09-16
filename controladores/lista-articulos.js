@@ -1,4 +1,4 @@
-import {seleccionarProductos, insertarProductos} from "../modelos/productos.js";
+import {seleccionarProductos, insertarProductos, actualizarProductos, eliminarProductos} from "../modelos/productos.js";
 
 // Elementos del DOM
 const listado = document.querySelector("#listado");
@@ -45,7 +45,7 @@ async function mostrarArticulos() {
         
         <div class="col">
           <div class="card" style="width: 18rem">
-            <img src="./imagenes/productos/${articulo.imagen}" class="card-img-top" alt="${articulo.nombre}" />
+            <img src="./imagenes/productos/${articulo.imagen||'nodisponible.png'}" class="card-img-top" alt="${articulo.nombre}" />
             <div class="card-body">
               <h5 class="card-title"><span name="spancodigo">${articulo.codigo}</span> - <span name="spannombre">${articulo.nombre}</span></h5>
               <p class="card-text">
@@ -61,6 +61,7 @@ async function mostrarArticulos() {
             <div class="card-footer d-flex justify-content-center">
                 <button class="btn-editar btn btn-primary">Editar</button>
                 <button class="btn-borrar btn btn-danger">Borrar</button>
+                <input type="hidden" name="id" value="${articulo.id}" />
             </div>
           </div>
         </div>        
@@ -100,9 +101,15 @@ formulario.addEventListener('submit', (e) => {
             insertarProductos(datos);
             mensajeAlerta = '¡Datos guardados!';
             break;
+        case 'actualizar':
+            actualizarProductos(datos, id);
+            mensajeAlerta = '¡Datos actualizados!';
+            break;
+        default:
+            mensajeAlerta = '¡Error!';
     }
     insertarAlerta(mensajeAlerta, 'success');
-    mostrarProductos();
+    mostrarArticulos();
 })
 
 /**
@@ -120,3 +127,50 @@ const insertarAlerta = (mensaje, tipo) => {
     `;
     alerta.append(envoltorio);
 }
+
+/**
+ * Determina en qué elemento se realiza un evento
+ * @param elemento
+ * @param evento
+ * @param selector
+ * @param manejador
+ */
+const on = (elemento, evento, selector, manejador) => {
+    elemento.addEventListener(evento, e => {
+        if (e.target.closest(selector)) {
+            manejador(e);
+        }
+      })
+}
+
+/**
+ * Función para el botón Editar
+ */
+on(document, 'click', '.btn-editar', e => {
+  const cardFooter = e.target.parentNode;
+  id = cardFooter.querySelector('input[name="id"]').value;
+  articulo = articulos.find(item => item.id === id);
+  inputCodigo.value = articulo.codigo;
+  inputNombre.value = articulo.nombre;
+  inputDescripcion.value = articulo.descripcion;
+  inputPrecio.value = articulo.precio;
+  frmImagen.src = `./imagenes/productos/${articulo.imagen}`;
+  opcion = 'actualizar';
+  formularioModal.show();
+})
+
+/**
+ * Función para el botón Borrar
+ */
+on(document, 'click', '.btn-borrar', e => {
+  const cardFooter = e.target.parentNode;
+  id = cardFooter.querySelector('input[name="id"]').value;
+  articulo = articulos.find(item => item.id === id);
+  let aceptar = confirm(`¿Realmente desea eliminar a ${articulo.nombre}?`);
+  if (aceptar) {
+    eliminarProductos(id);
+    mensajeAlerta = '¡Datos eliminados!';
+    insertarAlerta(mensajeAlerta, 'danger');
+    mostrarArticulos();
+  }  
+})

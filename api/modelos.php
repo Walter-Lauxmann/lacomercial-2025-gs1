@@ -122,7 +122,7 @@ class Modelo extends Conexion {
 
         // Guardamos la instrucción SQL
         $sql ="INSERT INTO $this->tabla ($campos) VALUES ('$valores')";
-        echo $sql; // Mostramos la instrucción SQL
+        //echo $sql; // Mostramos la instrucción SQL
 
         // Ejecutamos la instrucción SQL y devolvemos el id
         if ($this->bd->query($sql)) {
@@ -133,5 +133,32 @@ class Modelo extends Conexion {
             return 0; 
         }
     }
+
+    /**
+     * Permite actualizar un registro en la BD
+     * @param datos los datos a actualizar
+     * @return
+     */
+    public function actualizar($datos) {
+        // UPDATE productos SET codigo='101', nombre='Samsung A56', ... WHERE id='3'
+        $actualizaciones= [];
+        foreach($datos as $key => $value) {
+            $actualizaciones[] = "$key='$value'";
+        }
+        $sql = "UPDATE $this->tabla SET " . implode(",", $actualizaciones) . " WHERE $this->criterio";
+        //echo $sql; // Mostramos la instrucción SQL
+        $this->bd->query($sql);
+    }
+
+    /**
+     * Permite eliminar un registro en la BD
+     * @return
+     */
+    public function eliminar() {
+        // DELETE FROM productos WHERE id='1'
+        $sql = "DELETE FROM $this->tabla WHERE $this->criterio";
+        $this->bd->query($sql);
+    }
+
 }
 ?>

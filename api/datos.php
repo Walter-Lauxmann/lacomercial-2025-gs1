@@ -5,6 +5,10 @@ require_once 'modelos.php';
 // Si hay un parámetro tabla
 if(isset($_GET['tabla'])) {
     $tabla = new Modelo($_GET['tabla']); // Creamos el objeto $tabla
+    if(isset($_GET['id'])) { // Si está seteado el id
+        $tabla->setCriterio("id=" . $_GET['id']); // Establecemos el criterio
+    }
+
     if(isset($_GET['accion'])) { // Si está seteada la acción
         switch ($_GET['accion']) { // Según la acción
             case 'seleccionar':
@@ -33,6 +37,25 @@ if(isset($_GET['tabla'])) {
                 }
                 
                 // Siempre enviamos la respuesta JSON al final
+                echo json_encode($respuesta);
+                break;
+
+            case 'actualizar':
+                $valores = $_POST;
+                $tabla->actualizar($valores); // Ejecutamos el método actualizar
+                $respuesta = [
+                    'success' => true,
+                    'message' => 'Registro actualizado correctamente.'
+                ];
+                echo json_encode($respuesta);
+                break;
+
+            case 'eliminar':
+                $tabla->eliminar(); // Ejecutamos el método eliminar)
+                $respuesta = [
+                    'success' => true,
+                    'message' => 'Registro eliminado correctamente.'
+                ];
                 echo json_encode($respuesta);
                 break;
         }
