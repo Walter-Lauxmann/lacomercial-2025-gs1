@@ -109,7 +109,7 @@ formulario.addEventListener('submit', (e) => {
             mensajeAlerta = '¡Error!';
     }
     insertarAlerta(mensajeAlerta, 'success');
-    mostrarArticulos();
+    mostrarArticulos(); // Mostramos los articulos
 })
 
 /**
@@ -130,15 +130,15 @@ const insertarAlerta = (mensaje, tipo) => {
 
 /**
  * Determina en qué elemento se realiza un evento
- * @param elemento
- * @param evento
- * @param selector
- * @param manejador
+ * @param elemento el elemento que contiene el objeto
+ * @param evento el evento realizado
+ * @param selector el selector seleccionado
+ * @param manejador el manejador del evento
  */
 const on = (elemento, evento, selector, manejador) => {
-    elemento.addEventListener(evento, e => {
-        if (e.target.closest(selector)) {
-            manejador(e);
+    elemento.addEventListener(evento, e => { // Agregamos la función para escuchar el evento
+        if (e.target.closest(selector)) { // Si el objetivo del manejador es el selector
+            manejador(e); // Ejecutamos la función del manejador
         }
       })
 }
@@ -147,15 +147,18 @@ const on = (elemento, evento, selector, manejador) => {
  * Función para el botón Editar
  */
 on(document, 'click', '.btn-editar', e => {
-  const cardFooter = e.target.parentNode;
-  id = cardFooter.querySelector('input[name="id"]').value;
-  articulo = articulos.find(item => item.id === id);
+  const cardFooter = e.target.parentNode; // Guardamos el elemento padre del botón
+  id = cardFooter.querySelector('input[name="id"]').value; // Guardamos el id
+  articulo = articulos.find(item => item.id === id); // Buscamos el artículo con ese id
+
+  // Asignamos los valores de los inputs del formulario
   inputCodigo.value = articulo.codigo;
   inputNombre.value = articulo.nombre;
   inputDescripcion.value = articulo.descripcion;
   inputPrecio.value = articulo.precio;
   frmImagen.src = `./imagenes/productos/${articulo.imagen}`;
   opcion = 'actualizar';
+  // Mostramos el formulario
   formularioModal.show();
 })
 
@@ -163,7 +166,7 @@ on(document, 'click', '.btn-editar', e => {
  * Función para el botón Borrar
  */
 on(document, 'click', '.btn-borrar', e => {
-  const cardFooter = e.target.parentNode;
+  const cardFooter = e.target.parentNode; 
   id = cardFooter.querySelector('input[name="id"]').value;
   articulo = articulos.find(item => item.id === id);
   let aceptar = confirm(`¿Realmente desea eliminar a ${articulo.nombre}?`);
